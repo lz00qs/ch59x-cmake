@@ -14,6 +14,7 @@
 /* 头文件包含 */
 #include "CONFIG.h"
 #include "HAL.h"
+#include "heartbeat.h"
 #include "observer.h"
 
 /*********************************************************************
@@ -60,13 +61,16 @@ int main(void)
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
 #ifdef DEBUG
-    GPIOA_SetBits(bTXD1);
-    GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
+    // GPIOA_SetBits(bTXD1);
+    // GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
+    GPIOB_SetBits((1<<13)); // for ch592d/f tx pin is pb13
+    GPIOB_ModeCfg((1<<13), GPIO_ModeOut_PP_5mA);
     UART1_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
     CH59x_BLEInit();
     HAL_Init();
+    Heartbeat_Init();
     GAPRole_ObserverInit();
     Observer_Init();
     Main_Circulation();
