@@ -237,7 +237,7 @@ static void ObserverEventCB(gapRoleEvent_t *pEvent)
             GAPRole_ObserverStartDiscovery(DEFAULT_DISCOVERY_MODE,
                                            DEFAULT_DISCOVERY_ACTIVE_SCAN,
                                            DEFAULT_DISCOVERY_WHITE_LIST);
-            PRINT("Discovering...\n ");
+            PRINT("Discovering...\n");
         }
         break;
 

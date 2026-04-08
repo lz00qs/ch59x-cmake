@@ -354,11 +354,36 @@ void mDelaymS(uint16_t t)
 }
 
 #ifdef DEBUG
+static void debug_uart_write_byte(char ch)
+{
+#if DEBUG == Debug_UART0
+    while(R8_UART0_TFC == UART_FIFO_SIZE);
+    R8_UART0_THR = ch;
+#elif DEBUG == Debug_UART1
+    while(R8_UART1_TFC == UART_FIFO_SIZE);
+    R8_UART1_THR = ch;
+#elif DEBUG == Debug_UART2
+    while(R8_UART2_TFC == UART_FIFO_SIZE);
+    R8_UART2_THR = ch;
+#elif DEBUG == Debug_UART3
+    while(R8_UART3_TFC == UART_FIFO_SIZE);
+    R8_UART3_THR = ch;
+#endif
+}
+
 int _write(int fd, char *buf, int size)
 {
     int i;
+    (void)fd;
     for(i = 0; i < size; i++)
     {
+        char ch = *buf++;
+        if(ch == '\n')
+        {
+            debug_uart_write_byte('\r');
+        }
+        debug_uart_write_byte(ch);
+        continue;
 #if DEBUG == Debug_UART0
         while(R8_UART0_TFC == UART_FIFO_SIZE);                  /* 等待数据发送 */
         R8_UART0_THR = *buf++; /* 发送数据 */

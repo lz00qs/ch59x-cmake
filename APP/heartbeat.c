@@ -37,7 +37,7 @@ uint16_t Heartbeat_ProcessEvent(uint8_t task_id, uint16_t events)
                         HEARTBEAT_BLINK_EVT,
                         MS1_TO_SYSTEM_TIME(HEARTBEAT_BLINK_PERIOD_MS));
         
-        PRINT("Hellow World!\r\n");
+        PRINT("Hellow World!\n");
 
         return events ^ HEARTBEAT_BLINK_EVT;
     }
