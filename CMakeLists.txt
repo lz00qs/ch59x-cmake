@@ -1,7 +1,18 @@
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 cmake_minimum_required(VERSION 3.20)
 
-set(ENV_FILE "${CMAKE_SOURCE_DIR}/CMakeEnvs.txt")
+# This project always targets a bare-metal RISC-V MCU rather than the host OS.
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR riscv)
+
+if(WIN32)
+    set(ENV_FILE "${CMAKE_SOURCE_DIR}/CMakeEnvs-Win.txt")
+elseif(APPLE)
+    set(ENV_FILE "${CMAKE_SOURCE_DIR}/CMakeEnvs-Mac.txt")
+else()
+    message(FATAL_ERROR "Unsupported host OS: ${CMAKE_HOST_SYSTEM_NAME}. Only Windows and macOS are supported.")
+endif()
+
 if(NOT EXISTS "${ENV_FILE}")
     message(FATAL_ERROR "Missing CMake environment file: ${ENV_FILE}")
 endif()
@@ -26,7 +37,7 @@ endforeach()
 
 foreach(REQUIRED_VAR TOOLCHAIN TOOLCHAIN_INCLUDE PROJECT_NAME CMAKE_BUILD_TYPE)
     if(NOT DEFINED ${REQUIRED_VAR} OR "${${REQUIRED_VAR}}" STREQUAL "")
-        message(FATAL_ERROR "Missing required variable in CMakeEnvs.txt: ${REQUIRED_VAR}")
+        message(FATAL_ERROR "Missing required variable in ${ENV_FILE}: ${REQUIRED_VAR}")
     endif()
 endforeach()
 
@@ -41,7 +52,6 @@ if(WIN32)
     set(CMAKE_OBJDUMP "${TOOLCHAIN}objdump.exe")
     set(SIZE "${TOOLCHAIN}size.exe")
 else()
-    set(CMAKE_SYSTEM_NAME Generic)
     set(CMAKE_C_COMPILER "${TOOLCHAIN}gcc")
     set(CMAKE_CXX_COMPILER "${TOOLCHAIN}g++")
     set(CMAKE_ASM_COMPILER "${TOOLCHAIN}gcc")
@@ -50,6 +60,8 @@ else()
     set(CMAKE_OBJDUMP "${TOOLCHAIN}objdump")
     set(SIZE "${TOOLCHAIN}size")
 endif()
+
+set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 
 project(${PROJECT_NAME} C ASM)
 

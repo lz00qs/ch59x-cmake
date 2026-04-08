@@ -1,0 +1,4 @@
+TOOLCHAIN=C:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/Toolchain/RISC-V Embedded GCC/bin/riscv-none-embed-
+TOOLCHAIN_INCLUDE=C:/MounRiver/MounRiver_Studio2/resources/app/resources/win32/components/WCH/Toolchain/RISC-V Embedded GCC/riscv-none-embed/include
+PROJECT_NAME=ch592-cmake
+CMAKE_BUILD_TYPE=debug
