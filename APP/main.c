@@ -61,10 +61,11 @@ int main(void)
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
 #ifdef DEBUG
-    // GPIOA_SetBits(bTXD1);
-    // GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
-    GPIOB_SetBits((1<<13)); // for ch592d/f tx pin is pb13
-    GPIOB_ModeCfg((1<<13), GPIO_ModeOut_PP_5mA);
+    // Remap UART1 from PA8/PA9 to PB12/PB13 to match the board wiring.
+    GPIOPinRemap(ENABLE, RB_PIN_UART1);
+    GPIOB_SetBits(GPIO_Pin_13);
+    GPIOB_ModeCfg(GPIO_Pin_13, GPIO_ModeOut_PP_5mA);
+    GPIOB_ModeCfg(GPIO_Pin_12, GPIO_ModeIN_PU);
     UART1_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
