@@ -1,4 +1,2 @@
 TOOLCHAIN=/Applications/MounRiver\ Studio\ 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V\ Embedded\ GCC/bin/riscv-none-embed-
 TOOLCHAIN_INCLUDE=/Applications/MounRiver\ Studio\ 2.app/Contents/Resources/app/resources/darwin/components/WCH/Toolchain/RISC-V\ Embedded\ GCC/riscv-none-embed/include
-PROJECT_NAME=ch59x-cmake
-CMAKE_BUILD_TYPE=debug

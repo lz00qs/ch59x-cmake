@@ -1,0 +1,2 @@
+PROJECT_NAME=ch59x-cmake
+CMAKE_BUILD_TYPE=debug
