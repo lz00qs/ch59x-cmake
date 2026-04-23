@@ -26,6 +26,35 @@ __attribute__((aligned(4))) uint32_t MEM_BUF[BLE_MEMHEAP_SIZE / 4];
 const uint8_t MacAddr[6] = {0x84, 0xC2, 0xE4, 0x03, 0x02, 0x02};
 #endif
 
+static void PrintUuidDerivedKey(void)
+{
+    uint8_t uid[8] __attribute__((aligned(4)));
+    uint8_t key[16];
+    uint8_t i;
+
+    GET_UNIQUE_ID(uid);
+
+    for(i = 0; i < sizeof(uid); i++)
+    {
+        key[i] = uid[i];
+        key[i + sizeof(uid)] = uid[i];
+    }
+
+    PRINT("UUID: ");
+    for(i = 0; i < sizeof(uid); i++)
+    {
+        PRINT("%02x", uid[i]);
+    }
+    PRINT("\n");
+
+    PRINT("AES-128 key: ");
+    for(i = 0; i < sizeof(key); i++)
+    {
+        PRINT("%02x", key[i]);
+    }
+    PRINT("\n");
+}
+
 /*********************************************************************
  * @fn      Main_Circulation
  *
@@ -61,14 +90,14 @@ int main(void)
     GPIOB_ModeCfg(GPIO_Pin_All, GPIO_ModeIN_PU);
 #endif
 #ifdef DEBUG
-    // Remap UART1 from PA8/PA9 to PB12/PB13 to match the board wiring.
-    GPIOPinRemap(ENABLE, RB_PIN_UART1);
-    GPIOB_SetBits(GPIO_Pin_13);
-    GPIOB_ModeCfg(GPIO_Pin_13, GPIO_ModeOut_PP_5mA);
-    GPIOB_ModeCfg(GPIO_Pin_12, GPIO_ModeIN_PU);
-    UART1_DefInit();
+    GPIOPinRemap(ENABLE, RB_PIN_UART0);
+    GPIOA_SetBits(GPIO_Pin_14);
+    GPIOA_ModeCfg(GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
+    GPIOA_ModeCfg(GPIO_Pin_15, GPIO_ModeIN_PU);
+    UART0_DefInit();
 #endif
     PRINT("%s\n", VER_LIB);
+    PrintUuidDerivedKey();
     CH59x_BLEInit();
     HAL_Init();
     Heartbeat_Init();
